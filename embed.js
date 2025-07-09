@@ -208,7 +208,6 @@
   const setInputAndSend = (text) => { handleSendMessage(text, true); };
   
   const showLeadForm = (show) => {
-      // **FIX:** Use the correct element 'leadForm' instead of the old 'leadFormContainer'
       leadForm.classList.toggle('hidden', !show);
       inputAreaContainer.classList.toggle('hidden', show);
       quickActionsContainer.classList.toggle('hidden', show);
@@ -265,11 +264,13 @@
           quickActionsContainer.querySelector('div').innerHTML = '';
       }
       try {
-          const systemPrompt = `You are the AI assistant for Cambridge Bespoke...`;
-          let chatHistory = [{ role: "user", parts: [{ text: systemPrompt }] }];
-          messages.slice(-10).forEach(msg => {
-              chatHistory.push({ role: msg.type === 'user' ? 'user' : 'model', parts: [{ text: msg.content }] });
-          });
+          // The client now only sends the raw message history.
+          // The system prompt is handled by the backend function.
+          let chatHistory = messages.slice(-10).map(msg => ({
+              role: msg.type === 'user' ? 'user' : 'model',
+              parts: [{ text: msg.content }]
+          }));
+
           const response = await fetch('/.netlify/functions/gemini', {
               method: 'POST',
               body: JSON.stringify({ chatHistory }),
@@ -292,7 +293,6 @@
           sendBtn.disabled = false;
           showLoadingIndicator(false);
           renderMessages();
-          // **FIX:** Use the correct element 'leadForm' here as well
           if (leadForm.classList.contains('hidden')) {
               renderQuickActions();
           }

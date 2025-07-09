@@ -14,6 +14,20 @@
     </style>
 </head>
 <body class="bg-gray-50">
+
+    <!-- 
+      HIDDEN FORM FOR NETLIFY:
+      Netlify's bots will find this plain HTML form during deployment and register it.
+      This allows our dynamic JavaScript form to submit correctly.
+    -->
+    <form name="consultation" netlify netlify-honeypot="bot-field" hidden>
+      <input type="text" name="name" />
+      <input type="email" name="email" />
+      <input type="tel" name="phone" />
+      <select name="project-type"></select>
+    </form>
+
+
     <div class="p-8 max-w-2xl mx-auto">
         <h1 class="text-3xl font-bold text-slate-800">Chatbot Test Page</h1>
         <p class="mt-4 text-slate-600">This page is for testing your chatbot. It loads the `embed.js` script, which contains all the chatbot's HTML, CSS, and JavaScript logic.</p>
