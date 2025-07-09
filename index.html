@@ -17,14 +17,14 @@
 
     <!-- 
       HIDDEN FORM FOR NETLIFY:
-      Netlify's bots will find this plain HTML form during deployment and register it.
-      This allows our dynamic JavaScript form to submit correctly.
+      This now includes the new 'message' textarea field.
     -->
     <form name="consultation" netlify netlify-honeypot="bot-field" hidden>
       <input type="text" name="name" />
       <input type="email" name="email" />
       <input type="tel" name="phone" />
       <select name="project-type"></select>
+      <textarea name="message"></textarea>
     </form>
 
 

@@ -71,6 +71,11 @@
                             <option value="Freestanding Furniture">Freestanding Furniture</option>
                             <option value="Commercial Project">Commercial Project</option>
                         </select>
+                        <!-- New Message Textarea -->
+                        <div class="relative">
+                          <textarea id="lead-message" name="message" placeholder="Brief message..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-500" rows="3" maxlength="1000"></textarea>
+                          <div id="char-counter" class="absolute bottom-2 right-2 text-xs text-gray-400">1000</div>
+                        </div>
                         <div class="flex space-x-2">
                             <button id="cancel-lead-btn" type="button" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50">Cancel</button>
                             <button id="submit-lead-btn" type="submit" class="flex-1 px-3 py-2 bg-slate-800 text-white rounded-lg text-sm hover:bg-slate-700">Submit</button>
@@ -110,6 +115,8 @@
   const leadForm = document.getElementById('lead-form');
   const inputAreaContainer = document.getElementById('input-area-container');
   const cancelLeadBtn = document.getElementById('cancel-lead-btn');
+  const leadMessageTextarea = document.getElementById('lead-message');
+  const charCounter = document.getElementById('char-counter');
   
   let isOpen = false;
   let isLoading = false;
@@ -236,6 +243,7 @@
           renderMessages();
           showLeadForm(false);
           leadForm.reset();
+          charCounter.textContent = '1000'; // Reset counter
 
       } catch (error) {
           const errorMessage = {
@@ -264,8 +272,6 @@
           quickActionsContainer.querySelector('div').innerHTML = '';
       }
       try {
-          // The client now only sends the raw message history.
-          // The system prompt is handled by the backend function.
           let chatHistory = messages.slice(-10).map(msg => ({
               role: msg.type === 'user' ? 'user' : 'model',
               parts: [{ text: msg.content }]
@@ -300,6 +306,7 @@
       }
   };
   
+  // --- Event Listeners ---
   chatToggleBtn.addEventListener('click', toggleChat);
   closeChatBtn.addEventListener('click', toggleChat);
   sendBtn.addEventListener('click', () => handleSendMessage());
@@ -311,5 +318,9 @@
   });
   cancelLeadBtn.addEventListener('click', () => showLeadForm(false));
   leadForm.addEventListener('submit', handleLeadSubmit);
+  leadMessageTextarea.addEventListener('input', () => {
+    const remaining = leadMessageTextarea.maxLength - leadMessageTextarea.value.length;
+    charCounter.textContent = remaining;
+  });
 
 })();
