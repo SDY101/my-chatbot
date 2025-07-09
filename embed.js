@@ -53,7 +53,6 @@
             <div id="bottom-panel" class="bg-white border-t border-gray-200">
                 <div id="quick-actions-container" class="p-3"><div class="flex flex-wrap gap-2 mb-2"></div></div>
                 
-                <!-- UPDATED: This is now a real form that Netlify can detect -->
                 <form id="lead-form" name="consultation" class="hidden p-4" data-netlify="true" netlify-honeypot="bot-field">
                     <input type="hidden" name="form-name" value="consultation" />
                     <p class="hidden"><label>Don’t fill this out if you’re human: <input name="bot-field" /></label></p>
@@ -109,7 +108,6 @@
   const sendBtn = document.getElementById('send-btn');
   const quickActionsContainer = document.getElementById('quick-actions-container');
   const leadForm = document.getElementById('lead-form');
-  const leadFormContainer = document.getElementById('lead-form-container');
   const inputAreaContainer = document.getElementById('input-area-container');
   const cancelLeadBtn = document.getElementById('cancel-lead-btn');
   
@@ -210,7 +208,8 @@
   const setInputAndSend = (text) => { handleSendMessage(text, true); };
   
   const showLeadForm = (show) => {
-      leadFormContainer.classList.toggle('hidden', !show);
+      // **FIX:** Use the correct element 'leadForm' instead of the old 'leadFormContainer'
+      leadForm.classList.toggle('hidden', !show);
       inputAreaContainer.classList.toggle('hidden', show);
       quickActionsContainer.classList.toggle('hidden', show);
       if(!show) renderQuickActions();
@@ -293,7 +292,10 @@
           sendBtn.disabled = false;
           showLoadingIndicator(false);
           renderMessages();
-          if (leadFormContainer.classList.contains('hidden')) renderQuickActions();
+          // **FIX:** Use the correct element 'leadForm' here as well
+          if (leadForm.classList.contains('hidden')) {
+              renderQuickActions();
+          }
           chatInput.focus();
       }
   };
