@@ -276,8 +276,9 @@
               parts: [{ text: msg.content }]
           }));
 
-          // **FIX:** This now calls the correct function name: 'gemini'
-          const response = await fetch('/.netlify/functions/gemini', {
+          // **FIX:** This now calls the correct function using its full, absolute URL.
+          const functionUrl = 'https://harmonious-donut-350394.netlify.app/.netlify/functions/gemini';
+          const response = await fetch(functionUrl, {
               method: 'POST',
               body: JSON.stringify({ chatHistory }),
           });

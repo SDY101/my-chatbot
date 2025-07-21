@@ -1,22 +1,29 @@
 // This is the final, optimized version with a CORS fix for your main website.
 
 exports.handler = async function (event) {
-  // Define the allowed origin (your main website)
-  const allowedOrigin = "https://cambridgebespoke.com";
+  // Define the allowed origins (your main website and the Netlify test site)
+  const allowedOrigins = ["https://cambridgebespoke.com", "https://harmonious-donut-350394.netlify.app"];
+  const origin = event.headers.origin;
+  
+  let corsHeader = {};
+  // Only add the CORS header if the request is from an allowed origin
+  if (allowedOrigins.includes(origin)) {
+      corsHeader = { 'Access-Control-Allow-Origin': origin };
+  }
 
   // Create the response headers
   const headers = {
-    'Access-Control-Allow-Origin': allowedOrigin,
+    ...corsHeader,
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS'
   };
 
-  // Handle preflight requests for CORS
+  // Handle preflight requests for CORS. This is a standard requirement for browsers.
   if (event.httpMethod === 'OPTIONS') {
     return {
-      statusCode: 200,
+      statusCode: 204, // Use 204 No Content for OPTIONS
       headers,
-      body: JSON.stringify({ message: 'CORS preflight successful' })
+      body: ''
     };
   }
   
