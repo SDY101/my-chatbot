@@ -53,10 +53,7 @@
             <div id="bottom-panel" class="bg-white border-t border-gray-200">
                 <div id="quick-actions-container" class="p-3"><div class="flex flex-wrap gap-2 mb-2"></div></div>
                 
-                <form id="lead-form" name="consultation" class="hidden p-4" data-netlify="true" netlify-honeypot="bot-field">
-                    <input type="hidden" name="form-name" value="consultation" />
-                    <p class="hidden"><label>Don’t fill this out if you’re human: <input name="bot-field" /></label></p>
-
+                <form id="lead-form" class="hidden p-4">
                     <h4 class="font-semibold text-sm mb-3 text-slate-800">Schedule a Consultation</h4>
                     <div class="space-y-3">
                         <input type="text" id="lead-name" name="name" placeholder="Your Name*" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-500" required>
@@ -224,12 +221,17 @@
       event.preventDefault();
       const formData = new FormData(leadForm);
       const name = formData.get('name');
+      
+      const formspreeEndpoint = "https://formspree.io/f/xrblevaq";
 
       try {
-          await fetch("/", {
+          await fetch(formspreeEndpoint, {
               method: "POST",
-              headers: { "Content-Type": "application/x-www-form-urlencoded" },
-              body: new URLSearchParams(formData).toString(),
+              headers: {
+                  'Accept': 'application/json',
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(Object.fromEntries(formData)),
           });
           
           const leadMessage = {
@@ -276,10 +278,10 @@
               parts: [{ text: msg.content }]
           }));
 
-          // **FIX:** This now calls the correct function using its full, absolute URL.
           const functionUrl = 'https://harmonious-donut-350394.netlify.app/.netlify/functions/gemini';
           const response = await fetch(functionUrl, {
               method: 'POST',
+              headers: {'Content-Type': 'application/json'},
               body: JSON.stringify({ chatHistory }),
           });
           if (!response.ok) throw new Error(`Server function failed with status ${response.status}`);
