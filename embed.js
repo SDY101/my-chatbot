@@ -71,7 +71,6 @@
                             <option value="Freestanding Furniture">Freestanding Furniture</option>
                             <option value="Commercial Project">Commercial Project</option>
                         </select>
-                        <!-- New Message Textarea -->
                         <div class="relative">
                           <textarea id="lead-message" name="message" placeholder="Brief message..." class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-slate-500" rows="3" maxlength="1000"></textarea>
                           <div id="char-counter" class="absolute bottom-2 right-2 text-xs text-gray-400">1000</div>
@@ -277,6 +276,7 @@
               parts: [{ text: msg.content }]
           }));
 
+          // **FIX:** This now calls the correct function name: 'gemini'
           const response = await fetch('/.netlify/functions/gemini', {
               method: 'POST',
               body: JSON.stringify({ chatHistory }),
